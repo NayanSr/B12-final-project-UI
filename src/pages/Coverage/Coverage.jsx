@@ -51,7 +51,7 @@ const handleSearch=(e)=>{
         </form>
       </div>
 
-      {/* Map container */}
+      {/* Map container Used React-leaflet */}
       <div className="border-2 border-teal-800 h-150 w-3/4 mx-auto">
         <MapContainer
           center={position}
