@@ -1,4 +1,6 @@
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
+import {Link} from 'react-router'
 
 const Registration = () => {
   const {
@@ -7,8 +9,16 @@ const Registration = () => {
     formState: { errors },
   } = useForm();
 
+  const {registerUser}= useAuth();
+
+
   const handleRegistration = (data) => {
     console.log(data);
+    registerUser(data.email, data.password)
+    .then(result=>{
+      console.log(result)
+    })
+    .catch(error=>{console.log(error)})
   };
 
   return (
@@ -31,7 +41,7 @@ const Registration = () => {
           <label className="label">Password</label>
           <input
             type="password"
-            {...register("password", { required: true, minLength: 6,pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/ })}
+            {...register("password", { required: true, minLength: 6, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/ })}
             className="input"
             placeholder="Password"
             
@@ -52,6 +62,7 @@ const Registration = () => {
           <button className="btn btn-neutral mt-4">Register</button>
         </fieldset>
       </form>
+      <p className="mt-2 ">Already have an account? Go to <Link to='/login' className='underline text-blue-600 text-lg'>LogIn</Link> </p>
     </div>
   );
 };

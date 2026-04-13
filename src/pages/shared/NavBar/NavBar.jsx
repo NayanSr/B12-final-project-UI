@@ -1,7 +1,15 @@
 import { NavLink } from "react-router";
 import Logo from "../../../components/Logo/Logo";
+import useAuth from "../../../hooks/useAuth";
 
 const NavBar = () => {
+
+  const {user}= useAuth();
+
+  console.log(user)
+
+
+
   const links = (
     <>
       <li>
