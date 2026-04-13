@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 
 const Registration = () => {
@@ -11,6 +11,10 @@ const Registration = () => {
   } = useForm();
 
   const { registerUser, updateUserProfile } = useAuth();
+
+  const location= useLocation();
+  const navigate= useNavigate();
+
 
   const handleRegistration = (data) => {
     console.log(data);
@@ -36,6 +40,7 @@ const Registration = () => {
           updateUserProfile(userProfile)
             .then(() => {
               console.log("User profile Updated");
+              navigate(location?.state || '/')
             })
             .catch((error) => console.log(error));
         });
@@ -120,7 +125,7 @@ const Registration = () => {
       </form>
       <p className="mt-2 ">
         Already have an account? Go to{" "}
-        <Link to="/login" className="underline text-blue-600 text-lg">
+        <Link state={location.state} to="/login" className="underline text-blue-600 text-lg">
           LogIn
         </Link>{" "}
       </p>

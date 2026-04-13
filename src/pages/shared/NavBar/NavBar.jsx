@@ -70,7 +70,7 @@ const NavBar = () => {
         {
           user? <button onClick={handleLogOut} className="btn">LogOut</button> : <Link to='/login'>Sign In</Link>
         }
-        <Link to='/beARider' className="btn ml-2">Be A Rider</Link>
+        <Link to='/rider' className="btn ml-2">Be A Rider</Link>
       </div>
     </div>
   );

@@ -1,9 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import GoogleLoginBtn from "./GoogleLoginBtn";
 
 const Login = () => {
+  const location= useLocation();
+  const navigate= useNavigate();
+
+  console.log('login', location)
   const {
     register,
     handleSubmit,
@@ -16,6 +20,7 @@ const Login = () => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result);
+        navigate(location?.state || '/')
       })
       .catch((error) => {
         console.log(error);
@@ -60,7 +65,7 @@ const Login = () => {
       </form>
       <p className="mt-2 ">
         Do not have an account? Go to{" "}
-        <Link to="/register" className="underline text-amber-600 text-lg">
+        <Link state={location.state} to="/register" className="underline text-amber-600 text-lg">
           Register
         </Link>{" "}
       </p>

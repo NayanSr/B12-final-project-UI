@@ -5,6 +5,8 @@ import Coverage from "../pages/Coverage/Coverage";
 import AuthLayout from "../layouts/AuthLayout";
 import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
+import Privateroute from "./Privateroute";
+import Rider from "../pages/Rider/Rider";
 
 
 export const router = createBrowserRouter([
@@ -15,6 +17,10 @@ export const router = createBrowserRouter([
     {
       index:true,
       Component: Home
+    },
+    {
+      path:'rider',
+      element: <Privateroute><Rider/></Privateroute>
     },
     {
       path:'coverage',
