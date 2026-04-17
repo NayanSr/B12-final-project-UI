@@ -1,8 +1,9 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 const SendParcel = () => {
-  const serviceCenters= useLoaderData();
+  const serviceCenters = useLoaderData();
   const {
     register,
     handleSubmit,
@@ -10,25 +11,61 @@ const SendParcel = () => {
     formState: { errors },
   } = useForm();
   // getting region name without duplication from loaded data
-  const regionsDuplicated= serviceCenters.map(ct=>ct.region);
-  const regions= [...new Set(regionsDuplicated)];
-  const senderRegionVar= useWatch({control, name:'senderRegion'});
-  const receiverRegionVar= useWatch({control, name:'receiverRegion'});
-  console.log(senderRegionVar, receiverRegionVar)
+  const regionsDuplicated = serviceCenters.map((ct) => ct.region);
+  const regions = [...new Set(regionsDuplicated)];
+  const senderRegionVar = useWatch({ control, name: "senderRegion" });
+  const receiverRegionVar = useWatch({ control, name: "receiverRegion" });
+  // console.log(senderRegionVar, receiverRegionVar);
 
   // loading districts for selectrd region
-  const districtsByRegion=region=>{
-    const regionDistricts= serviceCenters.filter(c=>c.region===region);
-    const districts= regionDistricts.map(d=>d.district);
+  const districtsByRegion = (region) => {
+    const regionDistricts = serviceCenters.filter((c) => c.region === region);
+    const districts = regionDistricts.map((d) => d.district);
     return districts;
-  }
+  };
 
-  // console.log(regions); 
-
-  
+  // console.log(regions);
 
   const handleSendParcel = (data) => {
-    console.log(data);
+    // console.log(data);
+    const isDocument = data.parcelType === "document";
+    const isSameDistrict = data.senderDistrict === data.receiverDistrict;
+    const parcelWeight = parseFloat(data.weight);
+    console.log(parcelWeight);
+
+    let cost = 0;
+    if (isDocument) {
+      cost = isSameDistrict ? 60 : 80;
+    } else {
+      if (parcelWeight < 3) {
+        cost = isSameDistrict ? 110 : 150;
+      } else {
+        const minCharge = isSameDistrict ? 110 : 150;
+        const extraWeight = parcelWeight - 3;
+        const extraCharge = isSameDistrict
+          ? extraWeight * 40
+          : extraWeight * 40 + 40;
+        cost = minCharge + extraCharge;
+      }
+    }
+    console.log(cost);
+    Swal.fire({
+      title: "Is agree!?",
+      text: `You have to pay tk${cost}`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Agree",
+    }).then((result) => {
+      if (result.isConfirmed)
+        // Place orrder functionality
+        Swal.fire({
+          title: "Parcel Placed!",
+          text: "Your parcel has been taken by us.",
+          icon: "success",
+        });
+    });
   };
 
   return (
@@ -70,15 +107,23 @@ const SendParcel = () => {
               {...register("parcelName")}
             />
           </fieldset>
-          <fieldset className="fieldset ">
-            <label className="label">Weight</label>
-            <input
-              type="number"
-              className="input w-full"
-              placeholder="Parcel Weight (kg)"
-              {...register("weight")}
-            />
-          </fieldset>
+          <div>
+            <fieldset className="fieldset ">
+              <label className="label">Weight</label>
+              <input
+                type="number"
+                className="input w-full"
+                placeholder="Parcel Weight (kg)"
+                {...register("weight", { required: true })}
+              />
+            </fieldset>
+            {errors.weight?.type === "required" && (
+              <p className="text-red-600 bg-emerald-300 mt-2 p-1 rounded-lg">
+                {" "}
+                Weight is required!
+              </p>
+            )}
+          </div>
         </div>
 
         {/* to column */}
@@ -108,25 +153,38 @@ const SendParcel = () => {
               {/* Sender Region */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Sender region</legend>
-                <select {...register('senderRegion')} defaultValue="Pick a region" className="select w-full">
-                  <option disabled={true}>Pick a region</option>                  
-                  {regions.map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                <select
+                  {...register("senderRegion")}
+                  defaultValue="Pick a region"
+                  className="select w-full"
+                >
+                  <option disabled={true}>Pick a region</option>
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <span className="label">Optional</span>
               </fieldset>
-
 
               {/* Sender Districts */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Sender Districts</legend>
-                <select {...register('senderDistrict')} defaultValue="Pick a district" className="select w-full">
-                  <option disabled={true}>Pick a district</option>                  
-                  {districtsByRegion(senderRegionVar).map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                <select
+                  {...register("senderDistrict")}
+                  defaultValue="Pick a district"
+                  className="select w-full"
+                >
+                  <option disabled={true}>Pick a district</option>
+                  {districtsByRegion(senderRegionVar).map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <span className="label">Optional</span>
               </fieldset>
-
-           
 
               {/* sender address */}
               <label className="label">Sender Address</label>
@@ -182,9 +240,17 @@ const SendParcel = () => {
               {/* Receiver Region */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Receiver region</legend>
-                <select {...register('receiverRegion')} defaultValue="Pick a region" className="select w-full">
-                  <option disabled={true}>Pick a region</option>                  
-                  {regions.map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                <select
+                  {...register("receiverRegion")}
+                  defaultValue="Pick a region"
+                  className="select w-full"
+                >
+                  <option disabled={true}>Pick a region</option>
+                  {regions.map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <span className="label">Optional</span>
               </fieldset>
@@ -192,9 +258,17 @@ const SendParcel = () => {
               {/* Receiver District */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Receiver District</legend>
-                <select {...register('receiverDistrict')} defaultValue="Pick a region" className="select w-full">
-                  <option disabled={true}>Pick a District</option>                  
-                  {districtsByRegion(receiverRegionVar).map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                <select
+                  {...register("receiverDistrict")}
+                  defaultValue="Pick a region"
+                  className="select w-full"
+                >
+                  <option disabled={true}>Pick a District</option>
+                  {districtsByRegion(receiverRegionVar).map((r, i) => (
+                    <option key={i} value={r}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <span className="label">Optional</span>
               </fieldset>
