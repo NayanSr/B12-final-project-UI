@@ -1,11 +1,20 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 
 const SendParcel = () => {
   const serviceCenters= useLoaderData();
-  /* // getting region name without duplication from loaded data
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+  // getting region name without duplication from loaded data
   const regionsDuplicated= serviceCenters.map(ct=>ct.region);
   const regions= [...new Set(regionsDuplicated)];
+  const senderRegionVar= useWatch({control, name:'senderRegion'});
+  const receiverRegionVar= useWatch({control, name:'receiverRegion'});
+  console.log(senderRegionVar, receiverRegionVar)
 
   // loading districts for selectrd region
   const districtsByRegion=region=>{
@@ -14,13 +23,9 @@ const SendParcel = () => {
     return districts;
   }
 
-  console.log(regions); */
+  // console.log(regions); 
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  
 
   const handleSendParcel = (data) => {
     console.log(data);
@@ -103,21 +108,25 @@ const SendParcel = () => {
               {/* Sender Region */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Sender region</legend>
-                <select defaultValue="Pick a region" className="select w-full">
-                  <option disabled={true}>Pick a region</option>
-                  {/* {regions.map((region,index)=> <option key={index} value={region}>{region}</option>)} */}
+                <select {...register('senderRegion')} defaultValue="Pick a region" className="select w-full">
+                  <option disabled={true}>Pick a region</option>                  
+                  {regions.map((r,i)=> <option key={i} value={r}>{r}</option>)} 
                 </select>
                 <span className="label">Optional</span>
               </fieldset>
 
-              {/* sender district */}
-              <label className="label">Sender District</label>
-              <input
-                type="text"
-                className="input w-full mb-4"
-                placeholder="Sender District"
-                {...register("senderDistrict")}
-              />
+
+              {/* Sender Districts */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Sender Districts</legend>
+                <select {...register('senderDistrict')} defaultValue="Pick a district" className="select w-full">
+                  <option disabled={true}>Pick a district</option>                  
+                  {districtsByRegion(senderRegionVar).map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                </select>
+                <span className="label">Optional</span>
+              </fieldset>
+
+           
 
               {/* sender address */}
               <label className="label">Sender Address</label>
@@ -170,14 +179,25 @@ const SendParcel = () => {
                 {...register("receiverEmail")}
               />
 
-              {/* Receiver district */}
-              <label className="label">Receiver District</label>
-              <input
-                type="text"
-                className="input w-full mb-4"
-                placeholder="Receiver District"
-                {...register("receiverDistrict")}
-              />
+              {/* Receiver Region */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Receiver region</legend>
+                <select {...register('receiverRegion')} defaultValue="Pick a region" className="select w-full">
+                  <option disabled={true}>Pick a region</option>                  
+                  {regions.map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                </select>
+                <span className="label">Optional</span>
+              </fieldset>
+
+              {/* Receiver District */}
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Receiver District</legend>
+                <select {...register('receiverDistrict')} defaultValue="Pick a region" className="select w-full">
+                  <option disabled={true}>Pick a District</option>                  
+                  {districtsByRegion(receiverRegionVar).map((r,i)=> <option key={i} value={r}>{r}</option>)} 
+                </select>
+                <span className="label">Optional</span>
+              </fieldset>
 
               {/* Receiver address */}
               <label className="label">Receiver Address</label>
@@ -210,8 +230,8 @@ const SendParcel = () => {
         </div>
         <input
           type="submit"
-          value="Send Parcel"
-          className="btn btn-secondary"
+          value="✔  Send Parcel"
+          className="btn btn-secondary w-full text-green-500 text-xl font-semibold"
         />
       </form>
     </div>
