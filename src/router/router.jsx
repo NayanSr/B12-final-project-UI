@@ -7,6 +7,7 @@ import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
 import Privateroute from "./Privateroute";
 import Rider from "../pages/Rider/Rider";
+import SendParcel from "../pages/sendParcel/SendParcel";
 
 
 export const router = createBrowserRouter([
@@ -21,6 +22,11 @@ export const router = createBrowserRouter([
     {
       path:'rider',
       element: <Privateroute><Rider/></Privateroute>
+    },
+    {
+      path:'send-parcel',
+      element: <Privateroute><SendParcel/></Privateroute>,
+      loader:()=>fetch('/serviceCenters.json').then(res=>res.json())
     },
     {
       path:'coverage',
