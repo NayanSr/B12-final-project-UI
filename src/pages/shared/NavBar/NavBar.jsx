@@ -31,6 +31,12 @@ const NavBar = () => {
         <NavLink to='/about'>About</NavLink>
       </li>
 
+      {
+        user && <>
+        <li><NavLink to='/dashboard/my-parcels'>My Parcelsl</NavLink></li>
+        </>
+      }
+
      
     </>
   );
