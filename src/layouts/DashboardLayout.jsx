@@ -1,3 +1,4 @@
+import { TbTruckDelivery } from "react-icons/tb";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashboardLayout=()=>{
@@ -34,8 +35,14 @@ const DashboardLayout=()=>{
 
         {/* List item */}
         <li>
-            <NavLink to='/my-parcels'>My Parcels</NavLink>
+            <NavLink to='/dashboard/my-parcels' className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="myParcels">
+           
+            <TbTruckDelivery className="my-1.5 inline-block size-4" />
+            <span className="is-drawer-close:hidden"> My Parcels</span>
+            </NavLink>
         </li>
+
+
         <li>
           <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Settings">
             {/* Settings icon */}
@@ -43,6 +50,8 @@ const DashboardLayout=()=>{
             <span className="is-drawer-close:hidden">Settings</span>
           </button>
         </li>
+
+
       </ul>
     </div>
   </div>
