@@ -1,15 +1,20 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
 
 const SendParcel = () => {
   const serviceCenters = useLoaderData();
+  const {user}= useAuth();
+  console.log(user)
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
+  const axiosSecure= useAxiosSecure();
   // getting region name without duplication from loaded data
   const regionsDuplicated = serviceCenters.map((ct) => ct.region);
   const regions = [...new Set(regionsDuplicated)];
@@ -27,17 +32,17 @@ const SendParcel = () => {
   // console.log(regions);
 
   const handleSendParcel = (data) => {
-    // console.log(data);
+    console.log(data);
     const isDocument = data.parcelType === "document";
     const isSameDistrict = data.senderDistrict === data.receiverDistrict;
     const parcelWeight = parseFloat(data.weight);
-    console.log(parcelWeight);
+    // console.log(parcelWeight);
 
     let cost = 0;
     if (isDocument) {
       cost = isSameDistrict ? 60 : 80;
     } else {
-      if (parcelWeight < 3) {
+      if (parcelWeight <= 3) {
         cost = isSameDistrict ? 110 : 150;
       } else {
         const minCharge = isSameDistrict ? 110 : 150;
@@ -48,9 +53,9 @@ const SendParcel = () => {
         cost = minCharge + extraCharge;
       }
     }
-    console.log(cost);
+    // console.log(cost);
     Swal.fire({
-      title: "Is agree!?",
+      title: "Is agree ?",
       text: `You have to pay tk${cost}`,
       icon: "warning",
       showCancelButton: true,
@@ -60,11 +65,16 @@ const SendParcel = () => {
     }).then((result) => {
       if (result.isConfirmed)
         // Place orrder functionality
+      axiosSecure.post('/parcels',data)
+      .then(res=>{
+        console.log("After Saving Dta",res.data)
         Swal.fire({
           title: "Parcel Placed!",
           text: "Your parcel has been taken by us.",
           icon: "success",
         });
+      })
+        
     });
   };
 
@@ -138,6 +148,7 @@ const SendParcel = () => {
                 type="text"
                 className="input w-full mb-4"
                 placeholder="Sender Name"
+                defaultValue={user?.displayName}
                 {...register("senderName")}
               />
 
@@ -147,6 +158,7 @@ const SendParcel = () => {
                 type="text"
                 className="input w-full mb-4"
                 placeholder="Sender Email"
+                defaultValue={user?.email}
                 {...register("senderEmail")}
               />
 
