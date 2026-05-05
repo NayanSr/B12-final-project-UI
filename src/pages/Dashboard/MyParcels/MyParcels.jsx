@@ -5,6 +5,7 @@ import { FiEdit3 } from "react-icons/fi";
 import { HiMagnifyingGlassPlus } from "react-icons/hi2";
 import { FaRegTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const MyParcels = () => {
   const { user } = useAuth();
@@ -29,21 +30,17 @@ const MyParcels = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed)
-
-        axiosSecure.delete(`/parcels/${id}`)
-        .then(res=>{
-          console.log(res.data)
-         if(res.data.deletedCount){
-          refetch();
-           Swal.fire({
-          title: "Deleted!",
-          text: `Your parcel ${parcelName} has been deleted.`,
-          icon: "success",
+        axiosSecure.delete(`/parcels/${id}`).then((res) => {
+          console.log(res.data);
+          if (res.data.deletedCount) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: `Your parcel ${parcelName} has been deleted.`,
+              icon: "success",
+            });
+          }
         });
-         }
-        })
-
-        
     });
   };
 
@@ -58,7 +55,8 @@ const MyParcels = () => {
               <th></th>
               <th>Name</th>
               <th>Cost</th>
-              <th>Payment Status</th>
+              <th>Payment</th>
+              <th>Delivery Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -68,7 +66,16 @@ const MyParcels = () => {
                 <th>{index + 1}</th>
                 <td>{parcel.parcelName}</td>
                 <td>{parcel.cost}</td>
-                <td>Blue</td>
+                <td>
+                  {parcel.deliveryStatus === "paid" ? (
+                    <span className="text-green-600">Paid</span>
+                  ) : (
+                    <Link to={`/dashboard/payment/${parcel._id}`}>
+                      <button className="btn btn-primary">Pay</button>
+                    </Link>
+                  )}
+                </td>
+                <td>{parcel.deliveryStatus}</td>
                 <td>
                   <button className="btn  hover:bg-success">
                     <FiEdit3 className="w-4 h-4 stroke-3" />
@@ -77,7 +84,9 @@ const MyParcels = () => {
                     <HiMagnifyingGlassPlus className="w-4 h-4 stroke-1" />
                   </button>
                   <button
-                    onClick={() => handleParcelDelete(parcel._id, parcel.parcelName)}
+                    onClick={() =>
+                      handleParcelDelete(parcel._id, parcel.parcelName)
+                    }
                     className="btn  hover:bg-success"
                   >
                     <FaRegTrashCan className="w-4 h-4 stroke-3" />
