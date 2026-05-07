@@ -1,5 +1,5 @@
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
@@ -21,6 +21,7 @@ const SendParcel = () => {
   const senderRegionVar = useWatch({ control, name: "senderRegion" });
   const receiverRegionVar = useWatch({ control, name: "receiverRegion" });
   // console.log(senderRegionVar, receiverRegionVar);
+  const navigate= useNavigate();
 
   // loading districts for selectrd region
   const districtsByRegion = (region) => {
@@ -62,18 +63,23 @@ const SendParcel = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Agree",
+      confirmButtonText: "Agree and Continue Payment",
     }).then((result) => {
       if (result.isConfirmed)
         // Place orrder functionality
       axiosSecure.post('/parcels',data)
       .then(res=>{
         console.log("After Saving Dta",res.data)
-        Swal.fire({
-          title: "Parcel Placed!",
-          text: "Your parcel has been taken by us.",
-          icon: "success",
-        });
+        if(res.data.insertedId){
+          navigate('/dashboard/my-parcels')
+          Swal.fire({
+            position:'top',
+            icon:'success',
+            title:"Parcel has created. Please Pay",
+            showCancelButton:false,
+            timer:500
+          })
+        }
       })
         
     });
