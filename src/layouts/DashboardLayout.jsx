@@ -1,9 +1,10 @@
+import { FaRegCreditCard } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashboardLayout = () => {
   return (
-    <div className="drawer lg:drawer-open max-w-7xl mx-auto px-1"> 
+    <div className="drawer lg:drawer-open max-w-7xl mx-auto px-1">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Navbar */}
@@ -74,13 +75,22 @@ const DashboardLayout = () => {
               <NavLink
                 to="/dashboard/my-parcels"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="myParcels"
+                data-tip="My Parcels"
               >
                 <TbTruckDelivery className="my-1.5 inline-block size-4" />
                 <span className="is-drawer-close:hidden"> My Parcels</span>
               </NavLink>
             </li>
-
+            <li>
+              <NavLink
+                to="/dashboard/payment-history"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Payment History"
+              >
+                <FaRegCreditCard className="my-1.5 inline-block size-4"/>
+                <span className="is-drawer-close:hidden"> Payment History</span>
+              </NavLink>
+            </li>
             <li>
               <button
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
