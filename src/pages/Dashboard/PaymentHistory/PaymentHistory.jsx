@@ -26,15 +26,18 @@ const PaymentHistory=()=>{
         <th></th>
         <th>Name</th>
         <th>Amount</th>
+        <th>Paid At</th>
         <th>Transaction Id</th>
       </tr>
     </thead>
     <tbody>
       {
-        payments.map((payment, index)=><tr>
+        payments.map((payment, index)=><tr key={payment._id}>
         <th>{index+1}</th>
         <td>{payment.parcelName}</td>
         <td>${payment.amount}</td>
+        {/* can use momentjs to formet date */}
+        <td>{payment.paidAt}</td>    
         <td>{payment.transactionId}</td>
       </tr>)
       }
