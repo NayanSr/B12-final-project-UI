@@ -1,5 +1,6 @@
 import { FaRegCreditCard } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
+import { RiEBike2Fill } from "react-icons/ri";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashboardLayout = () => {
@@ -89,6 +90,16 @@ const DashboardLayout = () => {
               >
                 <FaRegCreditCard className="my-1.5 inline-block size-4"/>
                 <span className="is-drawer-close:hidden"> Payment History</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/dashboard/approve-riders"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Approve Riders"
+              >
+                <RiEBike2Fill  className="my-1.5 inline-block size-4"/>
+                <span className="is-drawer-close:hidden"> Apprive Riders</span>
               </NavLink>
             </li>
             <li>

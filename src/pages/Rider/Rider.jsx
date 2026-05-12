@@ -2,6 +2,9 @@ import { useForm, useWatch } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useLoaderData } from "react-router";
+import { useNavigate } from "react-router";
+
+
 
 const Rider = () => {
   const {
@@ -11,6 +14,7 @@ const Rider = () => {
     formState: { errors },
   } = useForm();
   const { user } = useAuth();
+  const navigate= useNavigate();
   const axiosSecure = useAxiosSecure();
   const serviceCenters = useLoaderData();
   const regionsDuplicated = serviceCenters?.map((ct) => ct.region);
@@ -22,8 +26,10 @@ const Rider = () => {
     axiosSecure.post("/riders", data)
     .then(res => {
       if (res.data.insertedId) {
+         navigate("/");
         // use toast
         alert("Applied for be a rider");
+       
       }
     });
   };
