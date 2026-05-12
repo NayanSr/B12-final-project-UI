@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const GoogleLoginBtn = () => {
   const { googleSignin } = useAuth();
   const navigate = useNavigate();
+  const axiosSecure=useAxiosSecure();
 
   const location = useLocation();
   console.log("social", location);
@@ -12,7 +14,21 @@ const GoogleLoginBtn = () => {
     googleSignin()
       .then((result) => {
         console.log(result.user);
-        navigate(location?.state || "/");
+       
+
+        //Create user in db
+        const userInfo={
+          email: result.user.email,
+          displayName:result.user.displayName,
+          photoUrl: result.user.photoUrl
+        }
+        axiosSecure.post('/users', userInfo)
+        .then(res=>{
+          console.log('User Has created', res.data);
+           navigate(location?.state || "/");
+        })
+
+
       })
       .catch((error) => console.log(error));
   };

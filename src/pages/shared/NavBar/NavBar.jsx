@@ -77,7 +77,7 @@ const NavBar = () => {
       </div>
       <div className="navbar-end">
         {
-          user? <button onClick={handleLogOut} className="btn">LogOut</button> : <Link to='/login'>Sign In</Link>
+          user? <span className='flex gap-2 items-center'><p>Hi <span className="font-semibold text-blue-800">{user.displayName}</span></p> <button onClick={handleLogOut} className="btn">LogOut</button></span> : <Link to='/login'>Sign In</Link>
         }
         <Link to='/rider' className="btn ml-2">Be A Rider</Link>
       </div>

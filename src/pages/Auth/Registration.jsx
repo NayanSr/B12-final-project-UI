@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Registration = () => {
   const {
@@ -14,28 +15,48 @@ const Registration = () => {
 
   const location= useLocation();
   const navigate= useNavigate();
+  const axiosSecure= useAxiosSecure();
 
 
   const handleRegistration = (data) => {
-    console.log(data);
     const profileImg = data.photo[0];
-
     registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
+      .then(() => {
+        // console.log('Result User', result.user);
 
         //01. store the image in form data
         const formData = new FormData();
         formData.append("image", profileImg);
 
-// 02. send the photo to store & get the url
+        // 02. send the photo to store & get the url
         const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
-        axios.post(image_API_URL, formData).then((res) => {
-          console.log("Afteer img upload", res.data.data.url);
+        axios.post(image_API_URL, formData)
+        .then(res => {
+         const photoUrl= res.data.data.url;
+
+
+         // Create user in database start
+          const userInfo={
+            displayName: data.name,
+            email: data.email,
+            photoUrl:photoUrl
+          }
+
+           axiosSecure.post("/users", userInfo)
+          .then(res=>{
+            console.log(res.data)
+            if(res.data.insertedId){
+              console.log('user created successfully')
+            }
+          })
+
+            // Create user in database end
+
+
           //  update the profile to firebase
           const userProfile = {
             displayName: data.name,
-            photoURL: res.data.data.url,
+            photoURL: photoUrl,
           };
           updateUserProfile(userProfile)
             .then(() => {
@@ -55,7 +76,7 @@ const Registration = () => {
       <form onSubmit={handleSubmit(handleRegistration)}>
         <fieldset className="fieldset">
           {/*//! Name */}
-          <label className="label">Name</label>
+          <label className="label">User Name</label>
           <input
             type="text"
             {...register("name", { required: true })}
