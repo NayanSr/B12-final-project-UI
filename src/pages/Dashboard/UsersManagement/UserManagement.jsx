@@ -17,7 +17,7 @@ const UserManagement = () => {
 
   const handleMakeAdmin = (user) => {
     const roleInfo = { role: "admin" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       console.log(res.data);
       if (res.data.modifiedCount) {
         //TODO use toast to confirm
@@ -29,7 +29,7 @@ const UserManagement = () => {
 
   const handleRoleToUser=user=>{
     const userInfo= {role:'user'};
-    axiosSecure.patch(`/users/${user._id}`,userInfo)
+    axiosSecure.patch(`/users/${user._id}/role`,userInfo)
     .then(res=>{
         if(res.data.modifiedCount){
               //TODO use toast to confirm
