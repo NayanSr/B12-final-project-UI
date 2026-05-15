@@ -1,9 +1,12 @@
-import { FaRegCreditCard } from "react-icons/fa";
+import { FaRegCreditCard, FaUser } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiEBike2Fill } from "react-icons/ri";
 import { Link, NavLink, Outlet } from "react-router";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
+  const {role}= useRole();
+  console.log(role)
   return (
     <div className="drawer lg:drawer-open max-w-7xl mx-auto px-1">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -92,7 +95,10 @@ const DashboardLayout = () => {
                 <span className="is-drawer-close:hidden"> Payment History</span>
               </NavLink>
             </li>
-            <li>
+            
+           {
+            role?.role==="admin" && <>
+             <li>
               <NavLink
                 to="/dashboard/approve-riders"
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -102,6 +108,17 @@ const DashboardLayout = () => {
                 <span className="is-drawer-close:hidden"> Apprive Riders</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/dashboard/users-management"
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Users Management"
+              >
+                <FaUser  className="my-1.5 inline-block size-4"/>
+                <span className="is-drawer-close:hidden"> Users Management</span>
+              </NavLink>
+            </li></>
+           }
             <li>
               <button
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"

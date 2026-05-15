@@ -3,6 +3,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaUserCheck } from "react-icons/fa";
 import { IoPersonRemove } from "react-icons/io5";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa";
 
 const ApproveRiders = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,6 +15,11 @@ const ApproveRiders = () => {
       return res.data;
     },
   });
+
+  const handleViewDetails=rider=>{
+   console.log(rider);
+  // TODO >> Use a modal to show details
+  }
 
   const updateRiderStatus=(rider,status)=>{
      const updateInfo= {status:status, email:rider.email};
@@ -60,6 +66,9 @@ const handleRejection=rider=>{
               <td>{rider?.district}</td>
               <td><p className={`${rider.status==="approved"? 'text-blue-700' :'text-orange-400'}`}>{rider?.status}</p></td>
               <td>
+                <button onClick={()=>handleViewDetails(rider)}>
+                    <FaRegEye  className="btn btn-sm mr-4" />
+                </button>
                 <button onClick={()=>handleApproval(rider)}>
                     <FaUserCheck className="btn btn-sm" />
                 </button>
