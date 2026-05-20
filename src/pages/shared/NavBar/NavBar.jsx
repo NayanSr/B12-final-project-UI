@@ -3,44 +3,40 @@ import Logo from "../../../components/Logo/Logo";
 import useAuth from "../../../hooks/useAuth";
 
 const NavBar = () => {
+  const { user, logOut } = useAuth();
+  console.log(user);
 
-  const {user,logOut}= useAuth();
-  
-  const handleLogOut=()=>{
+  const handleLogOut = () => {
     logOut()
-    .then()
-    .catch(error=>console.log(error))
-  }
-
-
-
-
+      .then()
+      .catch((error) => console.log(error));
+  };
 
   const links = (
     <>
       <li>
-        <NavLink to='/services'>Services</NavLink>
+        <NavLink to="/services">Services</NavLink>
       </li>
       <li>
-        <NavLink to='/send-parcel'>Send Parcel</NavLink>
+        <NavLink to="/send-parcel">Send Parcel</NavLink>
       </li>
       <li>
-        <NavLink to='/rider'>Be Rider</NavLink>
+        <NavLink to="/rider">Be Rider</NavLink>
       </li>
       <li>
-        <NavLink to='/coverage'>Coverage</NavLink>
+        <NavLink to="/coverage">Coverage</NavLink>
       </li>
       <li>
-        <NavLink to='/about'>About</NavLink>
+        <NavLink to="/about">About</NavLink>
       </li>
 
-      {
-        user && <>
-        <li><NavLink to='/dashboard/my-parcels'>My Parcelsl</NavLink></li>
+      {user && (
+        <>
+          <li>
+            <NavLink to="/dashboard/my-parcels">My Parcelsl</NavLink>
+          </li>
         </>
-      }
-
-     
+      )}
     </>
   );
   return (
@@ -79,10 +75,32 @@ const NavBar = () => {
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        {
-          user? <span className='flex gap-2 items-center'><p>Hi <span className="font-semibold text-blue-800">{user.displayName}</span></p> <button onClick={handleLogOut} className="btn">LogOut</button></span> : <Link to='/login'>Sign In</Link>
-        }
-        <Link to='/rider' className="btn ml-2">Be A Rider</Link>
+        {user ? (
+          <span className="flex gap-2 items-center">
+            <p>
+              Hi{" "}
+              <span className="font-semibold text-blue-800">
+                {user.displayName}
+              </span>
+            </p>{" "}
+            <button
+              onClick={handleLogOut}
+              className="btn btn-ghost rounded-full p-0 tooltip tooltip-bottom tooltip-success"
+              data-tip="Logout"
+            >
+              <img
+                className="w-10 h-10 rounded-full"
+                src={user?.photoURL}
+                alt="User Avatar"
+              />
+            </button>
+          </span>
+        ) : (
+          <Link to="/login">Sign In</Link>
+        )}
+        <Link to="/rider" className="btn ml-2">
+          Be A Rider
+        </Link>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import useRole from "../hooks/useRole";
 const AdminRoute=({children})=>{
 const { loading}= useAuth();
 const {role, roleLoading}= useRole();
-console.log(role)
+// console.log(role)
 
 
 if(loading || roleLoading){

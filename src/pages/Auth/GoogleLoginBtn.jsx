@@ -13,14 +13,15 @@ const GoogleLoginBtn = () => {
   const handleGoogleSignin = () => {
     googleSignin()
       .then((result) => {
-        console.log(result.user);
+        console.log('user', result.user);
        
 
         //Create user in db
         const userInfo={
           email: result.user.email,
           displayName:result.user.displayName,
-          photoUrl: result.user.photoUrl
+          photoUrl: result.user.photoURL
+
         }
         axiosSecure.post('/users', userInfo)
         .then(res=>{

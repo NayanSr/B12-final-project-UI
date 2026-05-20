@@ -16,31 +16,28 @@ const ApproveRiders = () => {
     },
   });
 
-  const handleViewDetails=rider=>{
-   console.log(rider);
-  // TODO >> Use a modal to show details
-  }
+  const handleViewDetails = (rider) => {
+    console.log(rider);
+    // TODO >> Use a modal to show details
+  };
 
-  const updateRiderStatus=(rider,status)=>{
-     const updateInfo= {status:status, email:rider.email};
-    axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
-    .then(res=>{
-       if(res.data.modifiedCount){
+  const updateRiderStatus = (rider, status) => {
+    const updateInfo = { status: status, email: rider.email };
+    axiosSecure.patch(`/riders/${rider._id}`, updateInfo).then((res) => {
+      if (res.data.modifiedCount) {
         alert(`You request has been ${status}`);
-        refetch()
-       }
-    })
-  }
+        refetch();
+      }
+    });
+  };
 
-const handleApproval=rider=>{
-   updateRiderStatus(rider,'approved')
-}
+  const handleApproval = (rider) => {
+    updateRiderStatus(rider, "approved");
+  };
 
-const handleRejection=rider=>{
-    updateRiderStatus(rider,'rejected')
-}
-
-
+  const handleRejection = (rider) => {
+    updateRiderStatus(rider, "rejected");
+  };
 
   return (
     <div>
@@ -54,35 +51,43 @@ const handleRejection=rider=>{
               <th>Name</th>
               <th>Email</th>
               <th>District</th>
-              <th>Status</th>
+              <th>Application Status</th>
+              <th>Work Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {riders.map((rider,index)=><tr key={index}>
-              <th>{index+1}</th>
-              <td>{rider?.name}</td>
-              <td>{rider?.email}</td>
-              <td>{rider?.district}</td>
-              <td><p className={`${rider.status==="approved"? 'text-blue-700' :'text-orange-400'}`}>{rider?.status}</p></td>
-              <td>
-                <button onClick={()=>handleViewDetails(rider)}>
-                    <FaRegEye  className="btn btn-sm mr-4" />
-                </button>
-                <button onClick={()=>handleApproval(rider)}>
+            {riders.map((rider, index) => (
+              <tr key={index}>
+                <th>{index + 1}</th>
+                <td>{rider?.name}</td>
+                <td>{rider?.email}</td>
+                <td>{rider?.district}</td>
+                <td>
+                  <p
+                    className={`${rider.status === "approved" ? "text-blue-700" : "text-orange-400"}`}
+                  >
+                    {rider?.status}
+                  </p>
+                </td>
+                <td>{rider?.workStatus}</td>
+
+                <td>
+                  <button onClick={() => handleViewDetails(rider)}>
+                    <FaRegEye className="btn btn-sm mr-4" />
+                  </button>
+                  <button onClick={() => handleApproval(rider)}>
                     <FaUserCheck className="btn btn-sm" />
-                </button>
-                <button onClick={()=>handleRejection(rider)}>
-                    <IoPersonRemove  className="btn btn-sm mx-4" />
-                </button>
-                <button>
-                    <FaRegTrashCan  className="btn btn-sm" />
-                </button>
-              </td>
-             
-            </tr>)}
-            
-            
+                  </button>
+                  <button onClick={() => handleRejection(rider)}>
+                    <IoPersonRemove className="btn btn-sm mx-4" />
+                  </button>
+                  <button>
+                    <FaRegTrashCan className="btn btn-sm" />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
