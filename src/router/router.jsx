@@ -18,6 +18,8 @@ import ApproveRiders from "../pages/Dashboard/ApproveRiders/ApproveRiders";
 import UserManagement from "../pages/Dashboard/UsersManagement/UserManagement";
 import AdminRoute from "./AdminRoute";
 import AssignRiders from "../pages/Dashboard/AssignRiders/AssignRiders";
+import AssignedDeliveries from "../pages/Dashboard/AssignedDeliveries/AssignedDeliveries";
+import RiderRoute from "./RiderRoute";
 
 
 export const router = createBrowserRouter([
@@ -69,6 +71,16 @@ export const router = createBrowserRouter([
         Component: MyParcels
         // element: <AdminRoute><MyParcels/></AdminRoute>
       },
+
+      // Rider Only Routes
+      {
+        path:'assigned-deliveries',
+        element:<RiderRoute><AssignedDeliveries/></RiderRoute>
+      },
+     
+
+
+      // Admin Only Routes
       {
         path: 'users-management',
         // element: <UserManagement/>,

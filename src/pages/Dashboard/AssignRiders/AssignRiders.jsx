@@ -54,7 +54,7 @@ const AssignRiders = () => {
         alert("Rider Has Been Assigned.")
       }
     })
-    console.log(assignedRiderInfo)
+    console.log(assignedRiderInfo);
   }
 
   return (
