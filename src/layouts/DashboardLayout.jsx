@@ -4,6 +4,7 @@ import { RiEBike2Fill } from "react-icons/ri";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
 import { MdOutlineAssignmentInd } from "react-icons/md";
+import { SiGoogletasks } from "react-icons/si";
 
 const DashboardLayout = () => {
   const { role } = useRole();
@@ -110,6 +111,19 @@ const DashboardLayout = () => {
                     <span className="is-drawer-close:hidden">
                      
                       Assigned Deliveries
+                    </span>
+                  </NavLink>
+                </li>
+             <li>
+                  <NavLink
+                    to="/dashboard/completed-deliveries"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="Completed Deliveries"
+                  >
+                    <SiGoogletasks className="my-1.5 inline-block size-4" />
+                    <span className="is-drawer-close:hidden">
+                     
+                      Completed Deliveries
                     </span>
                   </NavLink>
                 </li>
