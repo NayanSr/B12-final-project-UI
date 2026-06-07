@@ -19,7 +19,7 @@ const AssignedDeliveries = () => {
   console.log("Ps", parcels);
 
   const handleStatusUpdate = (parcel, status) => {
-    const statusUpdate = { deliveryStatus: status, riderId: parcel.riderId };
+    const statusUpdate = { deliveryStatus: status, riderId: parcel.riderId, trackingId: parcel.trackingId };
     const message= `Parcel Status in now ${status.split('_').join(' ')}`;
     axiosSecure
       .patch(`/parcels/${parcel._id}/status`, statusUpdate)

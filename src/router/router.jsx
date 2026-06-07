@@ -21,102 +21,136 @@ import AssignRiders from "../pages/Dashboard/AssignRiders/AssignRiders";
 import AssignedDeliveries from "../pages/Dashboard/AssignedDeliveries/AssignedDeliveries";
 import RiderRoute from "./RiderRoute";
 import CompletedDeliveries from "../pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
-
+import ParcelTrack from "../pages/ParcelTrack/ParcelTrack";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-   Component:RootLayout,
-   children:[
-    {
-      index:true,
-      Component: Home
-    },
-    {
-      path:'rider',
-      element: <Privateroute><Rider/></Privateroute>,
-      loader:()=>fetch('/serviceCenters.json').then(res=>res.json())
-    },
-    {
-      path:'send-parcel',
-      element: <Privateroute><SendParcel/></Privateroute>,
-      loader:()=>fetch('/serviceCenters.json').then(res=>res.json())
-    },
-    {
-      path:'coverage',
-      Component: Coverage,
-      loader: ()=>fetch('/serviceCenters.json').then(res=>res.json())
-    },
-   ]
-  },
-  {
-    path:'/',
-    Component: AuthLayout,
-    children:[
+    Component: RootLayout,
+    children: [
       {
-        path:'login',
-        Component: Login
+        index: true,
+        Component: Home,
       },
       {
-        path:'register',
-        Component: Registration
-      }
-    ]
+        path: "rider",
+        element: (
+          <Privateroute>
+            <Rider />
+          </Privateroute>
+        ),
+        loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
+      },
+      {
+        path: "send-parcel",
+        element: (
+          <Privateroute>
+            <SendParcel />
+          </Privateroute>
+        ),
+        loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
+      },
+      {
+        path: "coverage",
+        Component: Coverage,
+        loader: () => fetch("/serviceCenters.json").then((res) => res.json()),
+      },
+      {
+        path: "parcel-track/:trackingId",
+        Component: ParcelTrack,
+      },
+    ],
   },
   {
-    path:'dashboard',
-    element: <Privateroute><DashboardLayout/></Privateroute>,
-    children:[
+    path: "/",
+    Component: AuthLayout,
+    children: [
       {
-        path: 'my-parcels',
-        Component: MyParcels
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "register",
+        Component: Registration,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <Privateroute>
+        <DashboardLayout />
+      </Privateroute>
+    ),
+    children: [
+      {
+        path: "my-parcels",
+        Component: MyParcels,
         // element: <AdminRoute><MyParcels/></AdminRoute>
       },
 
       // Rider Only Routes
       {
-        path:'completed-deliveries',
-        element:<RiderRoute><CompletedDeliveries/></RiderRoute>
+        path: "completed-deliveries",
+        element: (
+          <RiderRoute>
+            <CompletedDeliveries />
+          </RiderRoute>
+        ),
       },
       {
-        path:'assigned-deliveries',
-        element:<RiderRoute><AssignedDeliveries/></RiderRoute>
+        path: "assigned-deliveries",
+        element: (
+          <RiderRoute>
+            <AssignedDeliveries />
+          </RiderRoute>
+        ),
       },
-     
-
 
       // Admin Only Routes
       {
-        path: 'users-management',
+        path: "users-management",
         // element: <UserManagement/>,
-        element: <AdminRoute><UserManagement/></AdminRoute>
+        element: (
+          <AdminRoute>
+            <UserManagement />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'approve-riders',
+        path: "approve-riders",
         // element: <ApproveRiders/>,
-        element: <AdminRoute><ApproveRiders/></AdminRoute>
+        element: (
+          <AdminRoute>
+            <ApproveRiders />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'assign-riders',
+        path: "assign-riders",
         // element: <AssignRiders/>,
-        element: <AdminRoute><AssignRiders/></AdminRoute>
+        element: (
+          <AdminRoute>
+            <AssignRiders />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'payment-history',
-        Component: PaymentHistory
+        path: "payment-history",
+        Component: PaymentHistory,
       },
       {
-        path:'payment/:parcelId',
-        Component:Payment
+        path: "payment/:parcelId",
+        Component: Payment,
       },
       {
-        path:'payment-success',
-        Component: PaymentSuccess
+        path: "payment-success",
+        Component: PaymentSuccess,
       },
       {
-        path:'payment-canceled',
-        Component: PaymentCancelled
-      }
-    ]
-  }
+        path: "payment-canceled",
+        Component: PaymentCancelled,
+      },
+    ],
+  },
 ]);

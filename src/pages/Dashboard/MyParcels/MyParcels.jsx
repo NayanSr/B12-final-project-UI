@@ -19,10 +19,9 @@ const MyParcels = () => {
     },
   });
 
-  console.log('parcels', parcels, 'user', user.email)
+  console.log("parcels", parcels, "user", user.email);
 
   const handleParcelDelete = (id, parcelName) => {
-    
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -47,17 +46,18 @@ const MyParcels = () => {
     });
   };
 
-  const handleParcelPay=async (parcel)=>{
-    const parcelInfo={
-      cost:parcel.cost,
+  const handleParcelPay = async (parcel) => {
+    const parcelInfo = {
+      cost: parcel.cost,
       parcelId: parcel._id,
       parcelName: parcel.parcelName,
-      senderEmail:parcel.senderEmail,
+      senderEmail: parcel.senderEmail,
+      trackingId: parcel.trackingId
     };
-    const res= await axiosSecure.post('/payment-checkout-session',parcelInfo);
+    const res = await axiosSecure.post("/payment-checkout-session", parcelInfo);
     // window.location.href= res.data.url; OR
     window.location.assign(res.data.url);
-  }
+  };
 
   return (
     <div>
@@ -86,16 +86,31 @@ const MyParcels = () => {
                   {parcel.deliveryStatus === "paid" ? (
                     <span className="text-green-600">Paid</span>
                   ) : (
-                    <span className="flex items-center" >
-<Link to={`/dashboard/payment/${parcel._id}`}>
-                      <button className="btn btn-secondary mr-2 btn-sm">Pay</button>
-                    </Link>
-                    {parcel.paymentStatus?<span className="bg-green-500 px-2 rounded-sm text-lg text-yellow-200">Paid</span>:<button onClick={()=>handleParcelPay(parcel)} className="btn btn-secondary btn-sm"> Direct Pay</button>}
+                    <span className="flex items-center">
+                      <Link to={`/dashboard/payment/${parcel._id}`}>
+                        <button className="btn btn-secondary mr-2 btn-sm">
+                          Pay
+                        </button>
+                      </Link>
+                      {parcel.paymentStatus ? (
+                        <span className="bg-green-500 px-2 rounded-sm text-lg text-yellow-200">
+                          Paid
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleParcelPay(parcel)}
+                          className="btn btn-secondary btn-sm"
+                        >
+                          {" "}
+                          Direct Pay
+                        </button>
+                      )}
                     </span>
-                    
                   )}
                 </td>
-                <td>{parcel.trackingId}</td>
+                <td>
+                  <Link to={`/parcel-track/${parcel.trackingId}`}>{parcel.trackingId}</Link>
+                </td>
                 <td>{parcel.deliveryStatus}</td>
                 <td>
                   <button className="btn  hover:bg-success">
