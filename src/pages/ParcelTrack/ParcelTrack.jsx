@@ -13,6 +13,7 @@ const ParcelTrack = () => {
       return res.data;
     },
   });
+  console.log('trackings', trackings)
 
   return (
     <div>

@@ -24,9 +24,9 @@ const handleSearch=(e)=>{
 
   return (
     <div>
-      <h2>We are available in 64 district</h2>
+      <h2 className='ml-4 text-2xl font-semibold text-center'>We are available in 64 district</h2>
       {/* Search Option */}
-      <div>
+      <div className='my-2 ml-4 text-center '>
         <form onSubmit={handleSearch}>
           <label className="input">
             <svg
